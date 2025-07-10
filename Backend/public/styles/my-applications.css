@@ -1,0 +1,102 @@
+.filterAndSortOptions {
+  padding-bottom: 5px;
+}
+
+#filterApplications {
+  border-collapse: collapse;
+  width: auto;
+  max-width: 1200px;
+  min-width: 1200px;
+  margin-top: 40px;
+  border: 1px solid black;
+  text-align: left;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 40px;
+}
+
+#mainApplicationsTable {
+  border-collapse: collapse;
+  width: auto;
+  max-width: 1200px;
+  margin-top: 40px;
+  border: 2px solid black;
+  text-align: left;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 40px;
+}
+
+#mainApplicationsTable td,
+#mainApplicationsTable th {
+  border: 1px solid black;
+  border-bottom: 2px solid black;
+  padding: 11px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 10pt;
+}
+
+#mainApplicationsTable thead th {
+  text-align: left;
+  white-space: nowrap;
+  font-size: 11pt;
+  font-weight: 600;
+}
+
+.rejected-status {
+  color: red;
+  font-weight: bold;
+}
+
+.button-link {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #0056b3;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  border: none;
+  transition: background-color 0.2s;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.button-link:hover {
+  background-color: #007bff;
+}
+
+#actionsColumn {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+}
+
+#actionsColumn button {
+  flex: 1;
+  max-width: 200px;
+  border: 1px solid black;
+  border-radius: 10%;
+}
+
+#deleteButton {
+  background-color: #a62c2c;
+  color: whitesmoke;
+  transition: background-color 0.2s;
+}
+
+#deleteButton:hover {
+  background-color: #e83f25;
+  color: whitesmoke;
+}
+
+#editButton {
+  background-color: #5a636a;
+  color: whitesmoke;
+  transition: background-color 0.2s;
+}
+
+#editButton:hover {
+  background-color: #6c757d;
+  color: whitesmoke;
+}
