@@ -25,7 +25,7 @@ Register a new user.
 }
 ```
 
-### Notes:###
+### Notes:
 - Requires `emailAddress` and `password` in request body.
 - Password is hashed before storage.
 - If the user is already logged in, they will be logged out first.
@@ -53,7 +53,7 @@ Login an existing user.
 }
 ```
 
-### Notes:###
+### Notes:
 - Requires valid `emailAddress` and `password`.
 - If user already logged in, previous session is logged out before new login.
 
@@ -76,7 +76,7 @@ Logout a logged-in user.
 }
 ```
 
-### Notes:###
+### Notes:
 - Logs out the user by destroying their session.
 
 ---
@@ -124,7 +124,7 @@ Get all job applications belonging to the authenticated user, with optional sort
 }
 ```
 
-### Notes:###
+### Notes:
 - User must be authenticated to access their own applications.
 - Sorting, filtering, and searching query parameters are optional and case-insensitive.
 - The returned application objects contain all relevant fields from the database.
@@ -157,7 +157,7 @@ Adds a new application for the logged-in user.
 }
 ```
 
-### Notes:***
+### Notes:
 - `applicationDate` defaults to the current date if omitted or invalid.
 - Enum fields (status, workMode) are case-insensitive and normalized on the server.
 - User identity (userId) is set from the authenticated session and cannot be overridden.
