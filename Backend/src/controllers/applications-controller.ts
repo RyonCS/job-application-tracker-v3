@@ -5,24 +5,28 @@ import { parseApplicationQueryParams } from '../utils/queryParser';
 const prisma = new PrismaClient();
 
 /**
- * Get's all Job Applications for the logged-in user.
- * @param req - The HTTP request object.
- *              It contains information about the client's request,
- *              including query params, session/user data, headers, etc.
- * @param res - The HTTP response object.
- *              It is used to send a response back to the client,
- *              including rendering views, sending JSON, and redirects.
- * @returns Renders the "my-application" page with the users job applications,
- *          or redirects to login if the user is not authenticated.
+ * Fetch all job applications for the currently logged-in user.
+ * 
+ * @param req - The Express request object, containing user info and query params.
+ * @param res - The Express response object, used to send data or errors back to the client.
+ * 
+ * This function:
+ * 1. Checks if a user is logged in by looking for `req.user.id`.
+ * 2. If no user is logged in, responds with a 401 Unauthorized error and stops.
+ * 3. Parses query parameters to filter, sort, and search applications.
+ * 4. Queries the database to get the user's matching job applications.
+ * 5. Sends the applications and query info as a JSON response.
+ * 6. Handles any database errors and responds with a 500 error if needed.
+ * 
+ *  @returns Sends a JSON response with the user's job applications and query info,
+ *           or an error response if unauthorized or on failure.
  */
 export const getAllApplications = async (req: Request, res: Response) => {
   // Get the user's ID from the session.
   const userId = req.user?.id;
 
   // If no user is logged in, redirect to login page.
-  if (!userId) {
-    return res.redirect('/auth/login');
-  }
+  if (!userId) { return res.status(401).json({error: 'Unauthorized.'}); }
 
   // Parse sorting, filtering, and searching options from the query parameters.
   const { where, orderBy, sort, filter, search } = parseApplicationQueryParams(
@@ -30,20 +34,27 @@ export const getAllApplications = async (req: Request, res: Response) => {
     userId,
   );
 
-  // Query the database for all matching job applications belonging to the user.
-  const applications = await prisma.jobApplication.findMany({
-    where,
-    orderBy,
-  });
+  try {
+    // Query the database for all matching job applications belonging to the user.
+    const applications = await prisma.jobApplication.findMany({
+      where,
+      orderBy,
+    });
 
-  // Render the EJS view for displaying the user's applications.
-  res.render('my-applications', { applications, sort, filter, search });
+    // Render the EJS view for displaying the user's applications.
+    res.json({ applications, sort, filter, search });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({error : 'Failed to fetch applications.'});
+  }
 };
 
 /**
  * Handles the creation of a new job application for a logged-in user.
  * @param req - Express request object containing form data in req.body and user info in req.user.
  * @param res - Express response object used to redirect the user after the new application is saved.
+ * @returns Sends a JSON response with a success message,
+ *         or an error response if unauthorized or on failure.
  */
 export const addNewApplication = async (req: Request, res: Response) => {
   // Get the logged-in user's ID from the session (populated by Passport).
@@ -67,21 +78,25 @@ export const addNewApplication = async (req: Request, res: Response) => {
    * - Removing dashes and whitespace
    * Example: "in-office" => "INOFFICE"
    */
-  const normalizeEnum = (value: string | undefined) =>
-    value?.toUpperCase().replace(/[-\s]/g, '');
+  const normalizeEnum = (value: string | undefined) => value?.toUpperCase().replace(/[-\s]/g, '');
 
-  // Create a new job application record in the database.
-  await prisma.jobApplication.create({
-    data: {
-      ...data, // Include all other form fields (e.g., company, position, location).
-      applicationDate: parsedDate,
-      userId,
-      workMode: normalizeEnum(workMode),
-      status: normalizeEnum(status),
-    },
-  });
+  try {
+    // Create a new job application record in the database.
+      const newApp = await prisma.jobApplication.create({
+        data: {
+          ...data, // Include all other form fields (e.g., company, position, location).
+          applicationDate: parsedDate,
+          userId,
+          workMode: normalizeEnum(workMode),
+          status: normalizeEnum(status),
+        },
+      });
 
-  res.redirect('/applications/my-applications');
+    res.status(201).json({message: 'Application successfully created.', applicationId : newApp.id});
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({error: 'Failed to create new application.'});
+  }
 };
 
 /**
@@ -93,7 +108,8 @@ export const addNewApplication = async (req: Request, res: Response) => {
  * @param req - Express request object containing the application ID in req.params,
  *              user session data in req.user, and updated form data in req.body.
  * @param res - Express response object used to redirect after update or on error.
- * @returns Redirects to "/applications/my-applications"
+ * @returns Sends a JSON response with a success message,
+ *          or an error response if unauthorized or on failure.
  */
 export const editApplication = async (req: Request, res: Response) => {
   // Get current user's ID from session (via Passport)
@@ -102,8 +118,18 @@ export const editApplication = async (req: Request, res: Response) => {
   // Get application ID from route parameters.
   const { id } = req.params;
 
+  let application;
   // Look up the existing application by its ID.
-  const application = await prisma.jobApplication.findUnique({ where: { id } });
+  try { application = await prisma.jobApplication.findUnique({ where: { id } });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({error : 'Database error.'});
+  }
+
+  // If the application does not exist or does not belong to the current user,
+  // prevent unauthorized access by redirecting back to the dashboard.
+  if (!application) { return res.status(404).json({error : 'Application not found.'}); }
+  if (application.userId !== userId) { return res.status(403).json({error : 'Forbidden. You do not have access to this application.'}); }
 
   // Extract fields from the request body.
   const { applicationDate, workMode, status } = req.body;
@@ -116,28 +142,26 @@ export const editApplication = async (req: Request, res: Response) => {
    * Converts strings to uppercase and strips whitespace or dashes.
    * Example: "in-office" → "INOFFICE"
    */
-  const normalizeEnum = (value: string | undefined) =>
-    value?.toUpperCase().replace(/[-\s]/g, '');
+  const normalizeEnum = (value: string | undefined) => value?.toUpperCase().replace(/[-\s]/g, '');
 
-  // If the application does not exist or does not belong to the current user,
-  // prevent unauthorized access by redirecting back to the dashboard.
-  if (!application || application.userId !== userId) {
-    return res.redirect('/applications/my-applications');
+  try {
+    // Update the application with the new data.
+    await prisma.jobApplication.update({
+      where: { id },
+      data: {
+        ...req.body,
+        applicationDate: parsedDate,
+        workMode: normalizeEnum(workMode),
+        status: normalizeEnum(status),
+      },
+    });
+
+    // Redirect back to the user's applications dashboard after update.
+    res.status(200).json({message: 'Application successfully updated.'});
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({error: 'Failed to update application.'});
   }
-
-  // Update the application with the new data.
-  await prisma.jobApplication.update({
-    where: { id },
-    data: {
-      ...req.body,
-      applicationDate: parsedDate,
-      workMode: normalizeEnum(workMode),
-      status: normalizeEnum(status),
-    },
-  });
-
-  // Redirect back to the user's applications dashboard after update.
-  res.redirect('/applications/my-applications');
 };
 
 /**
@@ -145,27 +169,34 @@ export const editApplication = async (req: Request, res: Response) => {
  *
  * @param req - Express request object containing the application ID in the route parameters
  * @param res - Express response object used to redirect the user after deletion
- * @returns Redirects the user to the applications dashboard after deletion
+ * @returns Sends a JSON response indicating success or failure of deletion.
  */
 export const deleteApplication = async (req: Request, res: Response) => {
   // Extract the application ID from the route parameters.
   const { id } = req.params;
-
   const userId = req.user?.id;
 
   // Look up the application in the database.
-  const application = await prisma.jobApplication.findUnique({
-    where: { id },
-  });
+  let application;
+  try {
+    application = await prisma.jobApplication.findUnique({ where: { id } });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error : 'Failed to fetch application.'});
+  }
+  
 
   // If application doesn't exist or doesn't belong to the logged-in user, deny access.
-  if (!application || application.userId !== userId) {
-    return res.redirect('/applications/my-applications');
-  }
+  if (!application) { return res.status(404).json({ error: "Could not find application."})}
+
+  if (application.userId !== userId) { return res.status(403).json({error: 'Forbidden. You do not have access to this application.'})}
 
   // If everything checks out, delete the application.
-  await prisma.jobApplication.delete({ where: { id } });
-
-  // Redirect to the dashboard after deletion.
-  res.redirect('/applications/my-applications');
+  try {
+    await prisma.jobApplication.delete({ where: { id } });
+      return res.status(200).json({message : 'Successfully deleted application.'});
+  } catch (err) {
+      console.error(err);
+      res.status(500).json({error: 'Failed to delete jobApplication'});
+  }
 };

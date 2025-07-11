@@ -3,8 +3,6 @@ import rateLimit from 'express-rate-limit';
 import {
   login,
   register,
-  getLoginPage,
-  getRegisterPage,
   logOut,
 } from '../../controllers/auth-controller';
 

@@ -38,19 +38,19 @@ router.get('/my-applications', getAllApplications);
  * Handles form submission for adding a new job application.
  * Saves the new application to the database.
  */
-router.post('/my-applications', addApplicationLimiter, addNewApplication);
+router.post('/', addApplicationLimiter, addNewApplication);
 
 /**
  * PUT /applications/my-applications/:id
  * Handles submission of edits to an existing application.
  * Updates the application data in the database.
  */
-router.put('/my-applications/:id', editApplication);
+router.put('/:id', editApplication);
 
 /**
  * DELETE /applications/my-applications/:id
  * Deletes a specific job application by ID from the database.
  */
-router.delete('/my-applications/:id', deleteApplication);
+router.delete('/:id', deleteApplication);
 
 export default router;

@@ -17,8 +17,8 @@ const prisma = new PrismaClient();
  * 5. On successful login, redirects the user to their applications dashboard.
  * @param req - Express request object containing user credentials in req.body.
  * @param res - Express response object used to redirect or respond to the client
- * @returns Redirects the user either to the applications dashboard on success,
- *          or back to the login page on failure or error.
+ * @returns Sends a JSON response with a success message,
+ *          or an error response if unauthorized or on failure.
  */
 export const login = async (req: Request, res: Response) => {
   if (req.isAuthenticated()) {
@@ -35,21 +35,21 @@ export const login = async (req: Request, res: Response) => {
     passport.authenticate('local', (err: Error, authenticatedUser: any) => {
       if (err || !authenticatedUser) {
         console.log('Failed to authenticate user.');
-        return res.redirect('/auth/login'); // Redirect on error or failure.
+        return res.status(401).json({ error: 'Invalid Credentials or authentication failed.'})
       }
 
       // Log in the authenticated user (establish session).
       req.login(authenticatedUser, (err: Error) => {
         if (err) {
           console.log('Failed to log in.');
-          return res.redirect('/auth/login'); // Redirect if login error.
+          return res.status(500).json( {error:'Failed to establish a session.'});
         }
-        return res.redirect('/applications/my-applications'); // Redirect on success.
+        return res.status(200).json({message:'Login Successful.'})
       });
     })(req, res); // Immediately invoke the passport middleware with req, res.
   } catch (err) {
     console.log('Error during login process:', err);
-    return res.redirect('/auth/login'); // Redirect on unexpected errors.
+    return res.status(500).json({error:'An unexpected error occurred during login.'})
   }
 };
 
@@ -57,8 +57,8 @@ export const login = async (req: Request, res: Response) => {
  * Registers a new user by creating an account with email and password.
  * @param req - Express request object containing user registration data in req.body.
  * @param res - Express response object used to redirect the client.
- * @returns - Redirects the user to the applications dashboard on successful registration,
- *            or back to the login page if the email is already in use or on error.
+ * @return Sends a JSON response with a success message,
+ *         or an error response if unauthorized or on failure.
  */
 export const register = async (req: Request, res: Response) => {
   if (req.isAuthenticated()) {
@@ -80,7 +80,7 @@ export const register = async (req: Request, res: Response) => {
     // Redirect to login page if email is already registered.
     if (existingUser) {
       console.log('Existing user found.');
-      return res.redirect('/auth/login');
+      return res.status(409).json({error:'An account with this email address already exists.'});
     }
 
     // Hash the plain-text password before storing it.
@@ -93,20 +93,19 @@ export const register = async (req: Request, res: Response) => {
         passwordHash: hashedPassword,
       },
     });
-    console.log("New User Created. Email: ", emailAddress, "HashedPass: ", hashedPassword);
 
     req.login(newUser, (err) => {
       if (err) {
         console.log('Login error after registration:', err);
-        return res.redirect('/auth/login');
+        return res.status(500).json({error: 'Failed to establish a session after registering user.'});
       }
-      return res.redirect('/applications/my-applications');
+      return res.status(200).json({message:'Successfully registered user.'});
     });
 
   } catch (err) {
     console.log('Error', err);
     // Redirect back to login page on error.
-    return res.redirect('/auth/login');
+    return res.status(500).json({error:'An unexpected error occurred.'});
   }
 };
 
@@ -132,7 +131,7 @@ export const logOut = (req: Request, res: Response) => {
         return res.status(500).send("Could not log out.");
       }
 
-      res.redirect('/auth/login');
+      res.status(200).json({message:'Successfully logged out user.'});
     });
   });
 };

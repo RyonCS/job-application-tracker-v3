@@ -20,10 +20,6 @@ app.set('trust proxy', 1);
 // Initialize Postgres session store for Express sessions.
 const PgSession = pgSession(session);
 
-// Configure Express to use EJS and set the views directory.
-app.set('views', path.join(__dirname, '../src/views'));
-app.set('view engine', 'ejs');
-
 // -- Middleware Setup: --
 
 // Parse URL-encoded bodies (form submission).
@@ -34,9 +30,6 @@ app.use(express.json());
 
 // Enable HTTP method override for supporting "PUT/DELETE" in forms.
 app.use(methodOverride('_method'));
-
-// Serve static files like CSS, JS, and images from 'public' directory.
-app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Set up Postgres connection pool for storing session data.
 const pgPool = new pg.Pool({
@@ -82,20 +75,9 @@ app.use(passport.session());
 // -- Mount route handlers for different app sections: --
 
 // Routes related to job applications.
-app.use('/applications', applicationsRoutes);
+app.use('/api/v1/applications', applicationsRoutes);
 
 // Routes related to authentication (login, logout, signup).
 app.use('/api/v1/auth', authRoutes);
 
-// Define home route: render login page as default landing page.
-app.get('/', (req: Request, res: Response) => {
-  res.render('login');
-});
-
-// Define the port to listen on from environment variable or default 3000.
-const port = process.env.PORT || 3000;
-
-// Start Express server and listen for incoming requests on defined port.
-app.listen(port, () => {
-  console.log(`Listening on Port ${port}.`);
-});
+export default app;
