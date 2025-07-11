@@ -57,6 +57,8 @@ Login an existing user.
 - Requires valid `emailAddress` and `password`.
 - If user already logged in, previous session is logged out before new login.
 
+---
+
 ### POST /auth/logout
 Logout a logged-in user.
 
@@ -76,6 +78,8 @@ Logout a logged-in user.
 
 ### Notes:###
 - Logs out the user by destroying their session.
+
+---
 
 ## 💼 Application Routes
 
@@ -125,6 +129,8 @@ Get all job applications belonging to the authenticated user, with optional sort
 - Sorting, filtering, and searching query parameters are optional and case-insensitive.
 - The returned application objects contain all relevant fields from the database.
 
+---
+
 ### POST /applications
 Adds a new application for the logged-in user.
 
@@ -156,6 +162,8 @@ Adds a new application for the logged-in user.
 - Enum fields (status, workMode) are case-insensitive and normalized on the server.
 - User identity (userId) is set from the authenticated session and cannot be overridden.
 - Partial or missing optional fields (e.g., company, position) are allowed.
+
+---
 
 ### PUT /applications
 
@@ -193,6 +201,8 @@ Adds a new application for the logged-in user.
 - `applicationDate` should be a valid date string (`YYYY-MM-DD`).
 - Enum fields (`status` and `workMode`) are normalized before updating.
 - User must own the application to update it.
+
+---
 
 ### DELETE /api/v1/applications/:id  
 Delete a job application by its ID.
