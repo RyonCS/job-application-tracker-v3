@@ -30,6 +30,8 @@ Register a new user.
 - Password is hashed before storage.
 - If the user is already logged in, they will be logged out first.
 
+---
+
 ### POST /auth/login
 Login an existing user.
 
