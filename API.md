@@ -25,7 +25,7 @@ Register a new user.
 }
 ```
 
-### Notes: ###
+### Notes:###
 - Requires `emailAddress` and `password` in request body.
 - Password is hashed before storage.
 - If the user is already logged in, they will be logged out first.
