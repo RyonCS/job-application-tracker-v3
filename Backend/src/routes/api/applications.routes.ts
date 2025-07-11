@@ -31,7 +31,7 @@ const addApplicationLimiter = rateLimit({
  * GET /applications/my-applications
  * Renders a page displaying all job applications for the logged-in user.
  */
-router.get('/my-applications', getAllApplications);
+router.get('/', getAllApplications);
 
 /**
  * POST /applications/my-applications

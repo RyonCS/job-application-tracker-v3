@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 // Load environment variables from .env.test file.
 dotenv.config({ path: './tests/.env.test' });
 
-describe('GET /api/v1/applications/my-applications', () => {
+describe('GET /api/v1/applications', () => {
   const agent = request.agent(app);
 
   const testEmail = process.env.VALID_EMAIL_TEST!;
@@ -56,7 +56,7 @@ describe('GET /api/v1/applications/my-applications', () => {
 
   // Tests retrieving all job applications for the test user.
   it('returns job applications for the logged in user', async () => {
-    const res = await agent.get('/api/v1/applications/my-applications').expect(200);
+    const res = await agent.get('/api/v1/applications').expect(200);
 
     expect(res.body.applications).toBeInstanceOf(Array);
     expect(res.body).toHaveProperty('sort');

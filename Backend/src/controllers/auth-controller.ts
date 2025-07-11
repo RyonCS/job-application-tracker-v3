@@ -8,6 +8,69 @@ dotenv.config();
 const prisma = new PrismaClient();
 
 /**
+ * Registers a new user by creating an account with email and password.
+ * @param req - Express request object containing user registration data in req.body.
+ * @param res - Express response object used to redirect the client.
+ * @return Sends a JSON response with a success message,
+ *         or an error response if unauthorized or on failure.
+ */
+export const register = async (req: Request, res: Response) => {
+  if (req.isAuthenticated()) {
+    await new Promise((resolve, reject) => {
+      req.logout((err) => {
+        if (err) reject(err);
+        else resolve(null);
+      });
+    });
+  }
+
+  const { emailAddress, password } = req.body;
+  try {
+    // Check if a user with the same email already exists.
+    const existingUser = await prisma.user.findUnique({
+      where: { emailAddress },
+    });
+
+    // Redirect to login page if email is already registered.
+    if (existingUser) {
+      console.log('Existing user found.');
+      return res.status(409).json({error:'An account with this email address already exists.'});
+    }
+
+    // Hash the plain-text password before storing it.
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    let newUser;
+    try {
+      // Create a new user record in the database.
+      newUser = await prisma.user.create({
+        data: {
+          emailAddress,
+          passwordHash: hashedPassword,
+        },
+      });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({error : 'Failed to create new user.'});
+    }
+    
+
+    req.login(newUser, (err) => {
+      if (err) {
+        console.log('Login error after registration:', err);
+        return res.status(500).json({error: 'Failed to establish a session after registering user.'});
+      }
+      return res.status(200).json({message:'Successfully registered user.'});
+    });
+
+  } catch (err) {
+    console.log('Error', err);
+    // Redirect back to login page on error.
+    return res.status(500).json({error:'An unexpected error occurred.'});
+  }
+};
+
+/**
  * Handles user login when username and password are provided.
  *
  * 1. Uses Passport's "local" strategy to authenticate the user.
@@ -50,62 +113,6 @@ export const login = async (req: Request, res: Response) => {
   } catch (err) {
     console.log('Error during login process:', err);
     return res.status(500).json({error:'An unexpected error occurred during login.'})
-  }
-};
-
-/**
- * Registers a new user by creating an account with email and password.
- * @param req - Express request object containing user registration data in req.body.
- * @param res - Express response object used to redirect the client.
- * @return Sends a JSON response with a success message,
- *         or an error response if unauthorized or on failure.
- */
-export const register = async (req: Request, res: Response) => {
-  if (req.isAuthenticated()) {
-    await new Promise((resolve, reject) => {
-      req.logout((err) => {
-        if (err) reject(err);
-        else resolve(null);
-      });
-    });
-  }
-
-  const { emailAddress, password } = req.body;
-  try {
-    // Check if a user with the same email already exists.
-    const existingUser = await prisma.user.findUnique({
-      where: { emailAddress },
-    });
-
-    // Redirect to login page if email is already registered.
-    if (existingUser) {
-      console.log('Existing user found.');
-      return res.status(409).json({error:'An account with this email address already exists.'});
-    }
-
-    // Hash the plain-text password before storing it.
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create a new user record in the database.
-    const newUser = await prisma.user.create({
-      data: {
-        emailAddress,
-        passwordHash: hashedPassword,
-      },
-    });
-
-    req.login(newUser, (err) => {
-      if (err) {
-        console.log('Login error after registration:', err);
-        return res.status(500).json({error: 'Failed to establish a session after registering user.'});
-      }
-      return res.status(200).json({message:'Successfully registered user.'});
-    });
-
-  } catch (err) {
-    console.log('Error', err);
-    // Redirect back to login page on error.
-    return res.status(500).json({error:'An unexpected error occurred.'});
   }
 };
 

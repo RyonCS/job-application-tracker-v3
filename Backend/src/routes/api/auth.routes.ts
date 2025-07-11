@@ -23,18 +23,18 @@ const authLimiter = rateLimit({
  */
 
 /**
- * POST /auth/login
- * Handles login form submission:
- * Authenticate user credentials and create a session if successful.
- */
-router.post('/login', authLimiter, login);
-
-/**
  * POST /auth/register
  * Handle registration form submission:
  * Create a new user in the database and start a session.
  */
 router.post('/register', authLimiter, register);
+
+/**
+ * POST /auth/login
+ * Handles login form submission:
+ * Authenticate user credentials and create a session if successful.
+ */
+router.post('/login', authLimiter, login);
 
 /**
  * POST /auth/logout
