@@ -1,7 +1,7 @@
 import EditableCell from "./EditableCell";
 import DeleteJobButton from "./DeleteJobButton";
 import { useState } from 'react';
-import type { Job } from "../../types/job";
+import type { Job } from "../../../types/job";
 
 interface Props {
   job: Job;

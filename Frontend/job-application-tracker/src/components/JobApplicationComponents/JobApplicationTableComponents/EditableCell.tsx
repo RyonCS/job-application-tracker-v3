@@ -32,7 +32,7 @@ const EditableCell = ({ field, value, onUpdate }: Props) => {
   };
 
   return (
-    <td className="border border-gray-300 text-sm p-0">
+    <td className="border border-gray-300 text-sm p-0.5">
       {editing ? (
         // Render different input types depending on the field.
 

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useJobs } from '../../contexts/JobContext';
+import { useJobs } from '../../../contexts/JobContext';
 
 const AddJobButton = () => {
     const {jobs, setJobs} = useJobs();
@@ -29,9 +29,9 @@ const AddJobButton = () => {
   return (
     <button
       onClick={createNewJob}
-      className="w-25 h-8 mb-2 mt-6 flex items-center justify-center rounded-2xl 
-      bg-green-100 text-green-600 hover:bg-green-600 hover:text-green-100 transition"
-      title="Delete Job"
+      className="w-25 h-8 mb-2 mt-6 flex items-center justify-center rounded-2xl shadow-sm
+      bg-emerald-100 text-emerald-600 hover:bg-emerald-600 hover:text-emerald-100 transition"
+      title="Add Job"
     >
       Add Job
     </button>

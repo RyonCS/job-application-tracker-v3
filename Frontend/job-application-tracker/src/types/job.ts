@@ -12,4 +12,5 @@ export type Job = {
 export type JobProps = {
   jobs: Job[];
   onUpdate: (job: Job) => void;
+  fetchJobs: () => void;
 };

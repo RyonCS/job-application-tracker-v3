@@ -1,5 +1,5 @@
-import { useJobs } from '../../contexts/JobContext';
-import type { Job } from '../../types/job';
+import { useJobs } from '../../../contexts/JobContext';
+import type { Job } from '../../../types/job';
 import axios from 'axios';
 
 interface Props {
@@ -24,7 +24,7 @@ const DeleteJobButton = ({job}: Props) => {
   return (
     <button
       onClick={deleteJob}
-      className="w-18 h-8 flex items-center justify-center rounded-2xl
+      className="w-18 h-8 flex items-center justify-center rounded-2xl shadow-sm
       bg-red-100 text-red-600 hover:bg-red-600 hover:text-red-100 transition"
       title="Delete Job"
     >

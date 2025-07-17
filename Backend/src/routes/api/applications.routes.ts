@@ -1,8 +1,9 @@
 import express from 'express';
-import { authenticateJWT } from '../../middleware/security-middleware';
 import rateLimit from 'express-rate-limit';
+import { authenticateJWT } from '../../middleware/security-middleware';
 import {
   getAllApplications,
+  getApplicationsSummary,
   addNewApplication,
   editApplication,
   deleteApplication,
@@ -32,6 +33,8 @@ const addApplicationLimiter = rateLimit({
  * Renders a page displaying all job applications for the logged-in user.
  */
 router.get('/', getAllApplications);
+
+router.get('/summary', getApplicationsSummary);
 
 /**
  * POST /applications/my-applications

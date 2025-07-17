@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { parseApplicationQueryParams } from '../utils/queryParser';
+import { getApplicationSummary } from '../helpers/applicationSummaryHelper';
 
 const prisma = new PrismaClient();
 
@@ -25,8 +26,6 @@ export const getAllApplications = async (req: Request, res: Response) => {
   // Get the user's ID from the session.
   const userId = req.user?.id;
 
-  console.log("Request for applications received.");
-
   // If no user is logged in, redirect to login page.
   if (!userId) { return res.status(401).json({error: 'Unauthorized.'}); }
 
@@ -50,6 +49,24 @@ export const getAllApplications = async (req: Request, res: Response) => {
     res.status(500).json({error : 'Failed to fetch applications.'});
   }
 };
+
+export const getApplicationsSummary = async (req: Request, res: Response) => {
+  const userId = req.user?.id;
+
+  // TODO: conversion rate.
+
+  try {
+    const jobApplications = await prisma.jobApplication.findMany({ where: { userId }});
+
+    const applicationSummary = getApplicationSummary(jobApplications);
+    console.log(applicationSummary);
+
+    return res.status(200).json({applicationSummary});
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Could not get summary'});
+  }
+}
 
 /**
  * Handles the creation of a new job application for a logged-in user.
@@ -149,8 +166,6 @@ export const editApplication = async (req: Request, res: Response) => {
       parsedDate.setHours(now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
     }
   }
-
-  console.log(parsedDate.toISOString());
 
   /**
    * Utility to normalize enums (workMode, status)
