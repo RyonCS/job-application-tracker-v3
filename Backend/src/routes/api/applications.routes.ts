@@ -1,5 +1,5 @@
 import express from 'express';
-import { ensureAuthenticated } from '../../middleware/security-middleware';
+import { authenticateJWT } from '../../middleware/security-middleware';
 import rateLimit from 'express-rate-limit';
 import {
   getAllApplications,
@@ -9,7 +9,7 @@ import {
 } from '../../controllers/applications-controller';
 
 const router = express.Router();
-router.use(ensureAuthenticated);
+router.use(authenticateJWT);
 
 const addApplicationLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute window

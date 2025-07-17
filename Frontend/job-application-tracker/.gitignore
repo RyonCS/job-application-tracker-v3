@@ -1,0 +1,33 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependency directories
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+*.local
+
+# Vite cache
+.vite/
+
+# Typescript cache
+*.tsbuildinfo
+
+# System files
+.DS_Store
+
+# Environment files
+.env
+.env.*.local
+
+# Editor settings
+.vscode/
+!.vscode/extensions.json
+.idea/
+
+# Tailwind JIT cache (optional, if you're using JIT mode)
+.tailwind-cache/

@@ -25,6 +25,8 @@ export const getAllApplications = async (req: Request, res: Response) => {
   // Get the user's ID from the session.
   const userId = req.user?.id;
 
+  console.log("Request for applications received.");
+
   // If no user is logged in, redirect to login page.
   if (!userId) { return res.status(401).json({error: 'Unauthorized.'}); }
 
@@ -42,7 +44,7 @@ export const getAllApplications = async (req: Request, res: Response) => {
     });
 
     // Render the EJS view for displaying the user's applications.
-    res.json({ applications, sort, filter, search });
+    return res.status(200).json({ applications, sort, filter, search });
   } catch (err) {
     console.error(err);
     res.status(500).json({error : 'Failed to fetch applications.'});
@@ -67,9 +69,11 @@ export const addNewApplication = async (req: Request, res: Response) => {
   // or default to the current date if none was provided.
   let parsedDate = new Date();
   if (applicationDate) {
-    const now = new Date();
-    const [year, month, day] = applicationDate.split('-').map(Number);
-    parsedDate = new Date(year, month - 1, day, now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
+    parsedDate = new Date(applicationDate);
+    if (isNaN(parsedDate.getTime())) {
+      // fallback if invalid
+      parsedDate = new Date();
+    }
   }
 
   /**
@@ -92,7 +96,7 @@ export const addNewApplication = async (req: Request, res: Response) => {
         },
       });
 
-    res.status(201).json({message: 'Application successfully created.', applicationId : newApp.id});
+    res.status(201).json({message: 'Application successfully created.', newApp});
   } catch (err) {
     console.error(err);
     res.status(500).json({error: 'Failed to create new application.'});
@@ -135,7 +139,18 @@ export const editApplication = async (req: Request, res: Response) => {
   const { applicationDate, workMode, status } = req.body;
 
   // Parse and normalize date.
-  const parsedDate = applicationDate ? new Date(applicationDate) : new Date();
+  let parsedDate = new Date();
+  if (applicationDate) {
+    parsedDate = new Date(applicationDate);
+    if (isNaN(parsedDate.getTime())) {
+      parsedDate = new Date();
+    } else {
+      const now = new Date();
+      parsedDate.setHours(now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
+    }
+  }
+
+  console.log(parsedDate.toISOString());
 
   /**
    * Utility to normalize enums (workMode, status)
