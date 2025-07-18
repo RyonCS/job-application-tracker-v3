@@ -1,9 +1,9 @@
 import { createContext, useContext } from "react";
-import type { Job } from "../types/job";
+import type { JobApplication } from "../types/jobApplication";
 
 export const JobsContext = createContext<{
-    jobs: Job[];
-    setJobs: React.Dispatch<React.SetStateAction<Job[]>>;
+    jobApplications: JobApplication[];
+    setJobApplications: React.Dispatch<React.SetStateAction<JobApplication[]>>;
 } | null>(null);
 
 export const useJobs = () => {

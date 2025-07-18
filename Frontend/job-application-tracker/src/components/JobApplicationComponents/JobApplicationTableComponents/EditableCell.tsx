@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import SortButton from './SortButton';
+import type { JobApplication } from '../../../types/jobApplication';
 
 interface Props {
-  field: string;
+  field: keyof JobApplication;
   value: string | number | undefined;
   onUpdate: (val: string | number) => void;
 }
@@ -37,7 +39,7 @@ const EditableCell = ({ field, value, onUpdate }: Props) => {
         // Render different input types depending on the field.
 
         // If field is 'date', show a date input with calendar dropdown.
-        field === 'date' ? (
+        field === 'applicationDate' ? (
           <input
             type="date"
             value={tempValue ?? ''}
@@ -97,9 +99,9 @@ const EditableCell = ({ field, value, onUpdate }: Props) => {
           onClick={() => setEditing(true)}
         >
           {/* If the company value is too long, truncate. */}
-          {((field === 'company' && value && value.toString().length > 23) 
-          ? value.toString().slice(0, 23) + '...'
-          : value || '')}
+          {(field === 'company' && value && value.toString().length > 23)
+            ? value.toString().slice(0, 23) + '...'
+            : value || ''}
         </div>
       )}
     </td>

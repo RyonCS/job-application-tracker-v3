@@ -9,7 +9,13 @@ export const getApplicationSummary = (jobApplications: any) => {
         return new Date(application.applicationDate) >= startOfTheWeek
     }).length;
 
-    return { totalApplications, weeklyApplications};
+    const successfulApplications = jobApplications.filter((jobApplication: JobApplication) => 
+        (jobApplication.status !== 'REJECTED' && jobApplication.status != 'APPLIED'));
+
+    const conversionPercent = (successfulApplications.length > 0 ? 
+        (successfulApplications.length / totalApplications * 100).toFixed(1) : '');
+
+    return { totalApplications, weeklyApplications, conversionPercent};
 };
 
 function getStartOfTheWeek(date: Date): Date {

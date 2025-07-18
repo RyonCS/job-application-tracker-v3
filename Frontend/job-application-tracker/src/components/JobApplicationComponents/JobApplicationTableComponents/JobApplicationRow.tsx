@@ -1,11 +1,11 @@
 import EditableCell from "./EditableCell";
 import DeleteJobButton from "./DeleteJobButton";
 import { useState } from 'react';
-import type { Job } from "../../../types/job";
+import type { JobApplication } from "../../../types/jobApplication";
 
 interface Props {
-  job: Job;
-  onUpdate: (job: Job) => void;
+  job: JobApplication;
+  onUpdate: (job: JobApplication) => void;
 }
 
 // A row representing a job in our array of job applications.
@@ -15,7 +15,7 @@ const JobApplicationRow = ({ job, onUpdate }: Props) => {
 
   // When there's a change to the value...
   // update the local job and send a put request to update the job in the DB.
-  const handleChange = (field: keyof Job, value: any) => {
+  const handleChange = (field: keyof JobApplication, value: any) => {
     const updatedValue = field === 'applicationDate' && value ? new Date(value) : value;
     const updatedJob = { ...localJob, [field]: updatedValue };
     setLocalJob(updatedJob);
@@ -25,7 +25,7 @@ const JobApplicationRow = ({ job, onUpdate }: Props) => {
   return (
     <tr className="border-2">
       {/* This cell converts the date from an object to MM-DD-YYY for display. */}
-      <EditableCell field="date"
+      <EditableCell field="applicationDate"
         value={new Date(localJob.applicationDate!).toISOString().substring(0, 10)}
         onUpdate={(val) => handleChange('applicationDate', val)}
       />

@@ -30,7 +30,7 @@ export const getAllApplications = async (req: Request, res: Response) => {
   if (!userId) { return res.status(401).json({error: 'Unauthorized.'}); }
 
   // Parse sorting, filtering, and searching options from the query parameters.
-  const { where, orderBy, sort, filter, search } = parseApplicationQueryParams(
+  const { where, orderBy, sort, filter } = parseApplicationQueryParams(
     req.query,
     userId,
   );
@@ -43,7 +43,7 @@ export const getAllApplications = async (req: Request, res: Response) => {
     });
 
     // Render the EJS view for displaying the user's applications.
-    return res.status(200).json({ applications, sort, filter, search });
+    return res.status(200).json({ applications, sort, filter });
   } catch (err) {
     console.error(err);
     res.status(500).json({error : 'Failed to fetch applications.'});
@@ -53,15 +53,13 @@ export const getAllApplications = async (req: Request, res: Response) => {
 export const getApplicationsSummary = async (req: Request, res: Response) => {
   const userId = req.user?.id;
 
-  // TODO: conversion rate.
-
   try {
     const jobApplications = await prisma.jobApplication.findMany({ where: { userId }});
 
     const applicationSummary = getApplicationSummary(jobApplications);
     console.log(applicationSummary);
-
     return res.status(200).json({applicationSummary});
+
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Could not get summary'});

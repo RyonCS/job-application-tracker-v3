@@ -1,13 +1,13 @@
 import { useJobs } from '../../../contexts/JobContext';
-import type { Job } from '../../../types/job';
+import type { JobApplication } from '../../../types/jobApplication';
 import axios from 'axios';
 
 interface Props {
-  job: Job;
+  job: JobApplication;
 }
 
 const DeleteJobButton = ({job}: Props) => {
-    const {jobs, setJobs} = useJobs();
+    const {jobApplications, setJobApplications} = useJobs();
 
     const deleteJob = async () => {
         try {
@@ -15,7 +15,7 @@ const DeleteJobButton = ({job}: Props) => {
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}`}
             });
             console.log(res);
-            setJobs(jobs.filter((j) => j.id !== job.id));
+            setJobApplications(jobApplications.filter((j) => j.id !== job.id));
         } catch (error) {
             console.error('Failed to delete job', error)
         }     

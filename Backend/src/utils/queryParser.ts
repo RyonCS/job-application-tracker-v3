@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client';
+import { Prisma, Status } from '@prisma/client';
 
 /**
  * Parses queery parameters from the URL to build Prisma-compatible
@@ -27,7 +27,6 @@ export function parseApplicationQueryParams(queryParams: any, userId: string) {
   // Extract sort, filter, and search params from the query, with defaults/fallbacks.
   const sort = (queryParams.sort ?? 'dateDesc') as keyof typeof sortMap;
   const filter = queryParams.filter;
-  const search = queryParams.searchByCompany;
 
   // Fallback to sorting by application date descending if invalid sort key
   const orderBy = sortMap[sort] || [{ applicationDate: 'desc' }];
@@ -41,13 +40,10 @@ export function parseApplicationQueryParams(queryParams: any, userId: string) {
   const where = {
     userId,
     ...(filter === 'excludeRejected' && {
-      status: { not: 'REJECTED' },
-    }),
-    ...(search && {
-      company: { contains: search, mode: 'insensitive' },
+      status: { not: Status.REJECTED },
     }),
   };
 
   // Return all the parsed values for use in Prisma query and frontend display.
-  return { where, orderBy, sort, filter, search };
+  return { where, orderBy, sort, filter };
 }

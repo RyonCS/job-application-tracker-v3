@@ -1,4 +1,4 @@
-import AuthHeader from '../components/AuthHeader';
+import AuthHeader from '../components/AuthFormComponents/AuthHeader';
 import type {ReactNode} from 'react';
 
 type AuthLayoutProps = {

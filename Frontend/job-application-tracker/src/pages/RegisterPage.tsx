@@ -1,5 +1,5 @@
-import AuthHeader from '../components/AuthHeader';
-import AuthForm from '../components/AuthForm';
+import AuthHeader from '../components/AuthFormComponents/AuthHeader';
+import AuthForm from '../components/AuthFormComponents/AuthForm';
 
 const registerPage = () => {
   return (

@@ -1,4 +1,4 @@
-export type Job = {
+export type JobApplication = {
     id: string;
     applicationDate?: Date;
     company?: string;
@@ -9,8 +9,7 @@ export type Job = {
     link?: string;
 }
 
-export type JobProps = {
-  jobs: Job[];
-  onUpdate: (job: Job) => void;
-  fetchJobs: () => void;
+export type JobApplicationProps = {
+  jobApplications: JobApplication[];
+  onUpdate: (jobApplication: JobApplication) => void;
 };
