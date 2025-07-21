@@ -10,7 +10,6 @@ dotenv.config();
 
 // Create an instance of Express application.
 const app = express();
-app.set('trust proxy', 1);
 
 app.use(
   cors({
@@ -21,12 +20,7 @@ app.use(
   })
 );
 
-app.options('*', cors({
-  origin: 'https://job-application-tracker-v3.vercel.app',
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+app.options('*', cors());
 
 // -- Middleware Setup: --
 

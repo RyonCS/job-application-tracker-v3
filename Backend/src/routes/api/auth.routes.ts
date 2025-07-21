@@ -1,11 +1,13 @@
 import express from 'express';
 import rateLimit from 'express-rate-limit';
+import cors from 'cors';
 import {
   login,
   register,
 } from '../../controllers/auth-controller';
 
 const router = express.Router();
+router.options('*', cors());
 
 // Sets the number of login or register requests to prevent spam.
 const authLimiter = rateLimit({
