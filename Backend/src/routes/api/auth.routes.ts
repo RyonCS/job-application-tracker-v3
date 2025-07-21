@@ -7,7 +7,10 @@ import {
 } from '../../controllers/auth-controller';
 
 const router = express.Router();
-router.options('*', cors());
+
+router.options('*', cors(), (req, res) => {
+  res.sendStatus(204);
+});
 
 // Sets the number of login or register requests to prevent spam.
 const authLimiter = rateLimit({
