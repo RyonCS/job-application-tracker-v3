@@ -11,7 +11,6 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route element={<PageTrackingWrapper />}>
-        {/* All your routes go here */}
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
