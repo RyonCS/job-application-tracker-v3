@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useJobs } from '../../../contexts/JobContext';
+import { BACKEND_URL } from '../../../config';
 
 const AddJobButton = () => {
     const {jobApplications, setJobApplications} = useJobs();
@@ -16,7 +17,7 @@ const AddJobButton = () => {
                 linkToJobPosting: ""
             }
 
-            const res = await axios.post('http://localhost:3000/api/v1/applications/', newJob, 
+            const res = await axios.post(`${BACKEND_URL}/api/v1/applications/`, newJob, 
                 { headers: { Authorization: `Bearer ${localStorage.getItem('token')}`}}
             );
 

@@ -2,6 +2,7 @@ import axios from 'axios';
 import {useEffect, useState} from 'react';
 import { JobsContext } from '../contexts/JobContext';
 import type { JobApplication } from '../types/jobApplication';
+import { BACKEND_URL } from '../config';
 import JobApplicationTable from '../components/JobApplicationComponents/JobApplicationTableComponents/JobApplicationTable';
 import ApplicationSummaryCard from '../components/JobApplicationComponents/ApplicationSummaryCard';
 
@@ -11,10 +12,10 @@ const JobApplicationsPage = () => {
     // State to hold the list of jobs fetched from the backend API.
     const [jobApplications, setJobApplications] = useState<JobApplication[]>([]);
 
-    const fetchJobs = async () => {
+    const fetchJobApplications = async () => {
         try {
             // Make a GET request to fetch job applications.
-            const res = await axios.get('http://localhost:3000/api/v1/applications', {
+            const res = await axios.get(`${BACKEND_URL}/api/v1/applications/`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`, // Attach token for auth.
                 },
@@ -31,22 +32,22 @@ const JobApplicationsPage = () => {
     // runs again whenever jobs changes (mainly to update with a sorted job list for adding new jobs.)
     // TODO: Need a better method.
     useEffect(() => {
-        fetchJobs();
+        fetchJobApplications();
     }, []);
 
     // Handler function to update a job.
-    const handleJobUpdate = async (updatedJob: JobApplication) => {
+    const handleJobApplicationUpdate = async (updatedJobApplication: JobApplication) => {
         // Optimistic updating.
         // We go through the list of jobs and replace the old job with the newly updated job before making the API call.
         setJobApplications(prevJobs => {
             // Update job. Then sort for display without API call.
-            return prevJobs.map(job => job.id === updatedJob.id ? updatedJob : job).sort(
+            return prevJobs.map(job => job.id === updatedJobApplication.id ? updatedJobApplication : job).sort(
               (a, b) => new Date(b.applicationDate!).getTime() - new Date(a.applicationDate!).getTime());
         })
 
         try {
             // Send a PUT request to update the job on the server.
-            await axios.put(`http://localhost:3000/api/v1/applications/${updatedJob.id}`, updatedJob, {
+            await axios.put(`${BACKEND_URL}/api/v1/applications/${updatedJobApplication.id}`, updatedJobApplication, {
                 headers: { Authorization :  `Bearer ${localStorage.getItem('token')}`},
             })
         } catch (error) {
@@ -66,7 +67,7 @@ const JobApplicationsPage = () => {
         </div>
         
 
-        <JobApplicationTable jobApplications={jobApplications} onUpdate={handleJobUpdate} />
+        <JobApplicationTable jobApplications={jobApplications} onUpdate={handleJobApplicationUpdate} />
     </JobsContext.Provider>
     )
 }

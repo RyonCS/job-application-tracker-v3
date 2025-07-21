@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { BACKEND_URL } from '../../config';
 import axios from 'axios';
 
 interface AuthFormProps {
@@ -28,7 +29,7 @@ const AuthForm = ({
 
     try {
         const response = await axios.post(
-        action,
+        `${BACKEND_URL}${action}`,
         { emailAddress, password, },
         { withCredentials: true,}
         );

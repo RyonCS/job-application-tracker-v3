@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useJobs } from '../../contexts/JobContext';
+import { BACKEND_URL } from '../../config';
 
 type Props = {
   cardHeaderText: string;
@@ -14,7 +15,7 @@ const ApplicationSummaryCard = ({cardHeaderText, summaryType}: Props) => {
   useEffect(() => {
     const getApplicationSummary = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/api/v1/applications/summary', {
+        const res = await axios.get(`${BACKEND_URL}/api/v1/applications/summary`, {
           headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
         });
 

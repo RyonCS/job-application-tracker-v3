@@ -55,8 +55,8 @@ const JobApplicationTable = ({jobApplications, onUpdate}: JobApplicationProps) =
             </thead>
             <tbody>
                 {/* For each job, return a JobApplicationRow */}
-                {jobApplications.map((job) => (
-                    <JobApplicationRow key={job.id} job={job} onUpdate={onUpdate} />
+                {jobApplications.map((jobApplication) => (
+                    <JobApplicationRow key={jobApplication.id} jobApplication={jobApplication} onUpdate={onUpdate} />
                 ))}
             </tbody>
         </table>
