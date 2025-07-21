@@ -5,32 +5,33 @@ import JobApplicationsPage from './pages/JobApplicationsPage';
 import MainLayout from './layout/MainLayout';
 import { Navigate, Route, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom';
 import { usePageTracking } from './usePageTracking';
+import { Outlet } from 'react-router-dom';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      {/* Public Auth Routes */}
-      <Route path="/" element={<Navigate to="/login" replace />} />
-      <Route path="/login" element={<LoginPage />}/>
-      <Route path="/register" element={<RegisterPage />}/>
-
-      {/* Private Routes */}
-      <Route element={<PrivateRoute/>}>
-        <Route element={<MainLayout />}>
-          <Route path="/JobApplications" element= {<JobApplicationsPage />} />
+      <Route element={<PageTrackingWrapper />}>
+        {/* All your routes go here */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route element={<PrivateRoute />}>
+          <Route element={<MainLayout />}>
+            <Route path="/JobApplications" element={<JobApplicationsPage />} />
+          </Route>
         </Route>
       </Route>
-
     </>
   )
-)
+);
+
+function PageTrackingWrapper() {
+  usePageTracking();
+  return <Outlet />;
+}
 
 function App() {
-  usePageTracking();
-  
-  return(
-    <RouterProvider router={router} />
-  )
+  return <RouterProvider router={router} />;
 }
 
 export default App;
