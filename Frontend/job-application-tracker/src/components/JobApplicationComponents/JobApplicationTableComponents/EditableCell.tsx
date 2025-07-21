@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import SortButton from './SortButton';
 import type { JobApplication } from '../../../types/jobApplication';
 
 interface Props {
