@@ -8,9 +8,7 @@ import {
 
 const router = express.Router();
 
-router.options('*', cors(), (req, res) => {
-  res.sendStatus(204);
-});
+router.options('/login', cors());
 
 // Sets the number of login or register requests to prevent spam.
 const authLimiter = rateLimit({
