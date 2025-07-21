@@ -4,6 +4,7 @@ import PrivateRoute from './components/PrivateRoute';
 import JobApplicationsPage from './pages/JobApplicationsPage';
 import MainLayout from './layout/MainLayout';
 import { Navigate, Route, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom';
+import { usePageTracking } from './usePageTracking';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,6 +26,8 @@ const router = createBrowserRouter(
 )
 
 function App() {
+  usePageTracking();
+  
   return(
     <RouterProvider router={router} />
   )
