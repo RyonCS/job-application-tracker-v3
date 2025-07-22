@@ -1,14 +1,11 @@
 import express from 'express';
 import rateLimit from 'express-rate-limit';
-import cors from 'cors';
 import {
   login,
   register,
 } from '../../controllers/auth-controller';
 
 const router = express.Router();
-
-router.options('/login', cors());
 
 // Sets the number of login or register requests to prevent spam.
 const authLimiter = rateLimit({
@@ -29,13 +26,13 @@ const authLimiter = rateLimit({
  * Handle registration form submission:
  * Create a new user in the database and start a session.
  */
-router.post('/register', register);
+router.post('/register', authLimiter, register);
 
 /**
  * POST /auth/login
  * Handles login form submission:
  * Authenticate user credentials and create a session if successful.
  */
-router.post('/login', login);
+router.post('/login', authLimiter, login);
 
 export default router;
