@@ -3,7 +3,6 @@ import {useEffect, useState} from 'react';
 import { JobsContext } from '../contexts/JobContext';
 import type { JobApplication } from '../types/jobApplication';
 import { BACKEND_URL } from '../config';
-// import { useNavigate } from 'react-router-dom';
 import JobApplicationTable from '../components/JobApplicationComponents/JobApplicationTableComponents/JobApplicationTable';
 import ApplicationSummaryCard from '../components/JobApplicationComponents/ApplicationSummaryCard';
 
@@ -13,7 +12,6 @@ const JobApplicationsPage = () => {
     // State to hold the list of jobs fetched from the backend API.
     const [jobApplications, setJobApplications] = useState<JobApplication[]>([]);
     const [filterRejected, setFilterRejected] = useState(false);
-    // const navigate = useNavigate();
 
     const jobApplicationsToDisplay = filterRejected ? jobApplications.filter((application) => application.status !== 'REJECTED') :
     jobApplications;
@@ -22,14 +20,15 @@ const JobApplicationsPage = () => {
         try {
             // Make a GET request to fetch job applications.
             const res = await axios.get(`${BACKEND_URL}/api/v1/applications/`, {
-                withCredentials: true
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`, // Attach token for auth.
+                },
             });
             // Update the jobs state with the received applications data.
             setJobApplications(res.data.applications);
 
         } catch (error) {
             console.error("Failed to fetch jobs.", error);
-            // navigate('/login');
         }
     };
     useEffect(() => {
@@ -50,7 +49,7 @@ const JobApplicationsPage = () => {
             // Send a PUT request to update the job on the server.
             console.log('Backend URL in get applications: ', BACKEND_URL);
             await axios.put(`${BACKEND_URL}/api/v1/applications/${updatedJobApplication.id}`, updatedJobApplication, {
-               withCredentials: true
+                headers: { Authorization :  `Bearer ${localStorage.getItem('token')}`},
             })
         } catch (error) {
             console.error('Update Failed: ', error);

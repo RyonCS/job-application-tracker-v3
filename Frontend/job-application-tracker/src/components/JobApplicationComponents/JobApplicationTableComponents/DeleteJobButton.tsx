@@ -12,10 +12,9 @@ const DeleteJobButton = ({jobApplication}: Props) => {
 
     const deleteJob = async () => {
         try {
-            const res = await axios.delete(`${BACKEND_URL}/api/v1/applications/${jobApplication.id}`, {
-             withCredentials: true
+            await axios.delete(`${BACKEND_URL}/api/v1/applications/${jobApplication.id}`, {
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}`}
             });
-            console.log(res);
             setJobApplications(jobApplications.filter((j) => j.id !== jobApplication.id));
         } catch (error) {
             console.error('Failed to delete job', error)

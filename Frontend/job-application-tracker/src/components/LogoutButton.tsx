@@ -1,15 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import { BACKEND_URL } from '../config';
-import axios from 'axios';
 
 const LogoutButton = () => {
     const navigate = useNavigate();
 
-    const handleLogout = async () => {
-        await axios.post(`${BACKEND_URL}/api/v1/auth/logout`, {}, {
-          withCredentials: true
-        });
-        navigate('/login');
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        navigate("/login");
     }
 
   return (
