@@ -1,8 +1,7 @@
 import { useJobs } from '../../../contexts/JobContext';
 
 const FilterByRejectedButton = () => {
-    const { jobApplications, filterRejected, setFilterRejected} = useJobs();
-    console.log(jobApplications);
+    const {filterRejected, setFilterRejected} = useJobs();
 
     const handleFilter = () => {
         setFilterRejected(!filterRejected);

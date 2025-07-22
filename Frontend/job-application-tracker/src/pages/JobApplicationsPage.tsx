@@ -47,7 +47,6 @@ const JobApplicationsPage = () => {
         
         try {
             // Send a PUT request to update the job on the server.
-            console.log('Backend URL in get applications: ', BACKEND_URL);
             await axios.put(`${BACKEND_URL}/api/v1/applications/${updatedJobApplication.id}`, updatedJobApplication, {
                 headers: { Authorization :  `Bearer ${localStorage.getItem('token')}`},
             })
