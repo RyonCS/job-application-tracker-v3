@@ -9,13 +9,12 @@ datasource db {
 }
 
 model User {
-  id           String        @id @default(uuid())
-  createdAt    DateTime      @default(now())
-  emailAddress        String        @unique
-  passwordHash String
-  role         Role          @default(APPLICANT)
-  lastLoginAt  DateTime      @default(now())
-
+  id              String           @id @default(uuid())
+  createdAt       DateTime         @default(now())
+  emailAddress    String           @unique
+  passwordHash    String
+  role            Role             @default(APPLICANT)
+  lastLoginAt     DateTime         @default(now())
   jobApplications JobApplication[]
 }
 
@@ -32,6 +31,20 @@ model JobApplication {
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
   user             User      @relation(fields: [userId], references: [id])
+}
+
+model session {
+  sid    String   @id @db.VarChar
+  sess   Json     @db.Json
+  expire DateTime @db.Timestamp(6)
+
+  @@index([expire], map: "IDX_session_expire")
+}
+
+model BlacklistedToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  createdAt DateTime @default(now())
 }
 
 enum Role {

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { parseApplicationQueryParams } from '../utils/queryParser';
-import { getApplicationSummary } from '../helpers/applicationSummaryHelper';
+import { getApplicationSummary, normalizeEnum } from '../helpers/helperFunctions';
 
 const prisma = new PrismaClient();
 
@@ -91,14 +91,6 @@ export const addNewApplication = async (req: Request, res: Response) => {
     }
   }
 
-  /**
-   * Normalizes enum values like `workMode` and `status` by:
-   * - Converting to uppercase
-   * - Removing dashes and whitespace
-   * Example: "in-office" => "INOFFICE"
-   */
-  const normalizeEnum = (value: string | undefined) => value?.toUpperCase().replace(/[-\s]/g, '');
-
   try {
     // Create a new job application record in the database.
       const newApp = await prisma.jobApplication.create({
@@ -164,13 +156,6 @@ export const editApplication = async (req: Request, res: Response) => {
       parsedDate.setHours(now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
     }
   }
-
-  /**
-   * Utility to normalize enums (workMode, status)
-   * Converts strings to uppercase and strips whitespace or dashes.
-   * Example: "in-office" → "INOFFICE"
-   */
-  const normalizeEnum = (value: string | undefined) => value?.toUpperCase().replace(/[-\s]/g, '');
 
   try {
     // Update the application with the new data.

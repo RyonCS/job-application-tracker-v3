@@ -4,12 +4,15 @@ import applicationsRoutes from './routes/api/applications.routes';
 import authRoutes from './routes/api/auth.routes';
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 // Load environment variables from .env file.
 dotenv.config();
 
 // Create an instance of Express application.
 const app = express();
+
+app.use(cookieParser());
 
 app.use(
   cors({
@@ -19,8 +22,6 @@ app.use(
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
-
-app.options('*', cors());
 
 // -- Middleware Setup: --
 

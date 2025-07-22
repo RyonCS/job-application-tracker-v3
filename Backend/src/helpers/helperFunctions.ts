@@ -26,3 +26,7 @@ function getStartOfTheWeek(date: Date): Date {
     start.setHours(0, 0, 0, 0);
     return start;
 }
+
+export const normalizeEnum = (value: string) => {
+    return value?.toUpperCase().replace(/[-\s]/g, '');
+}

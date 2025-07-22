@@ -30,11 +30,20 @@ export const register = async (req: Request, res: Response) => {
         data: { emailAddress, passwordHash, },
     });
 
-    const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET!, {
-      expiresIn: '7d',
+    const token = jwt.sign(
+      { id: newUser.id }, 
+      process.env.JWT_SECRET!,  
+      { expiresIn: '2h' }
+    );
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 2 * 60 * 60 * 1000
     });
 
-    return res.status(200).json({ message : 'User registered', token});
+    return res.status(200).json({ message : 'User registered' });
 
     } catch (err) {
       console.error(err);
@@ -65,13 +74,32 @@ export const login = async (req: Request, res: Response) => {
     const valid = await bcrypt.compare(password, user.passwordHash);
     if (!valid) return res.status(401).json({ error : 'Invalid credentials'});
 
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET!,  {
-      expiresIn: '7d',
-    })
+    const token = jwt.sign(
+      { id: user.id }, 
+      process.env.JWT_SECRET!,  
+      { expiresIn: '2h' }
+    );
 
-    return res.status(200).json({ message : 'Login Successful', token});
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 2 * 60 * 60 * 1000
+    });
+
+    return res.status(200).json({ message : 'Login Successful' });
   } catch (err) {
     console.error('Login Error: ', err);
     return res.status(500).json({ error: 'Internal Server Error'});
   }
 };
+
+export const logout = (req: Request, res: Response) => {
+  res.clearCookie('token',  {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+  })
+
+  res.status(200).json({ message: 'Logged out'})
+}
