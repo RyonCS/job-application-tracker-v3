@@ -29,11 +29,12 @@ const AuthForm = ({
     e.preventDefault();
     setLoading(true);
     try {
-        await axios.post(
+        const res = await axios.post(
         `${BACKEND_URL}${action}`,
         { emailAddress, password, },
         { withCredentials: true,}
         );
+        localStorage.setItem('token', res.data.token);
         setLoading(false);
         navigate('/JobApplications');
 
