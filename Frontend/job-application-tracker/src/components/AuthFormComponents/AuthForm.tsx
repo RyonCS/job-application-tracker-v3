@@ -28,7 +28,6 @@ const AuthForm = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    console.log('Backend URL:', BACKEND_URL);
     try {
         await axios.post(
         `${BACKEND_URL}${action}`,
