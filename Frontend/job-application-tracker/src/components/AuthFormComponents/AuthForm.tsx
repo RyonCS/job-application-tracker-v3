@@ -30,15 +30,12 @@ const AuthForm = ({
     setLoading(true);
     console.log('Backend URL:', BACKEND_URL);
     try {
-        const response = await axios.post(
+        await axios.post(
         `${BACKEND_URL}${action}`,
         { emailAddress, password, },
         { withCredentials: true,}
         );
         setLoading(false);
-
-        console.log('Successful Login:', response.data.token);
-        localStorage.setItem('token', response.data.token);
         navigate('/JobApplications');
 
     } catch (error: any) {
