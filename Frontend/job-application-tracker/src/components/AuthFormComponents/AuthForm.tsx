@@ -60,12 +60,15 @@ if (loading) { return <div>🕒 Waking up server, please wait...</div>; }
         <div className="bg-white p-14 pb-6 rounded-lg shadow-md w-full max-w-md flex flex-col items-center justify-center">
             <h1 className="text-2xl font-bold mb-8 text-[#113F67]"> {title} </h1>
             {/* Login Form. */}
-            <form onSubmit={handleSubmit} className="flex flex-col items-center w-full gap-2">
+            <form onSubmit={handleSubmit} 
+            autoComplete="on" 
+            name="login"
+            className="flex flex-col items-center w-full gap-2">
                 <div className="w-full">
                     <input
                     type="email"
-                    name="email"
-                    autoComplete="email"
+                    name="username"
+                    autoComplete="username"
                     value={emailAddress}
                     onChange={(e) => setEmailAddress(e.target.value)}
                     placeholder="Email Address"
