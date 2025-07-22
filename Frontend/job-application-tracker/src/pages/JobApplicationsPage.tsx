@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 import { JobsContext } from '../contexts/JobContext';
 import type { JobApplication } from '../types/jobApplication';
 import { BACKEND_URL } from '../config';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import JobApplicationTable from '../components/JobApplicationComponents/JobApplicationTableComponents/JobApplicationTable';
 import ApplicationSummaryCard from '../components/JobApplicationComponents/ApplicationSummaryCard';
 
@@ -13,7 +13,7 @@ const JobApplicationsPage = () => {
     // State to hold the list of jobs fetched from the backend API.
     const [jobApplications, setJobApplications] = useState<JobApplication[]>([]);
     const [filterRejected, setFilterRejected] = useState(false);
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const jobApplicationsToDisplay = filterRejected ? jobApplications.filter((application) => application.status !== 'REJECTED') :
     jobApplications;
