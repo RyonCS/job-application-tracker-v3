@@ -36,15 +36,7 @@ export const register = async (req: Request, res: Response) => {
       { expiresIn: '2h' }
     );
 
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
-      maxAge: 2 * 60 * 60 * 1000,
-      path: '/'
-    });
-
-    return res.status(200).json({ message : 'User registered' });
+    return res.status(200).json({ message : 'User registered', token });
 
     } catch (err) {
       console.error(err);
@@ -81,15 +73,7 @@ export const login = async (req: Request, res: Response) => {
       { expiresIn: '2h' }
     );
 
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
-      maxAge: 2 * 60 * 60 * 1000,
-      path: '/'
-    });
-
-    return res.status(200).json({ message : 'Login Successful' });
+    return res.status(200).json({ message : 'Login Successful', token });
   } catch (err) {
     console.error('Login Error: ', err);
     return res.status(500).json({ error: 'Internal Server Error'});
