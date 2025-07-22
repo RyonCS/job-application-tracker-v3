@@ -64,6 +64,8 @@ if (loading) { return <div>🕒 Waking up server, please wait...</div>; }
                 <div className="w-full">
                     <input
                     type="email"
+                    name="email"
+                    autoComplete="email"
                     value={emailAddress}
                     onChange={(e) => setEmailAddress(e.target.value)}
                     placeholder="Email Address"
@@ -75,6 +77,8 @@ if (loading) { return <div>🕒 Waking up server, please wait...</div>; }
                 <div className="w-full">
                     <input
                     type="password"
+                    name="password"
+                    autoComplete="current-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Password"
