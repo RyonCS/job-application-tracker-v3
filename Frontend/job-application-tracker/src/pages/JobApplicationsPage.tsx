@@ -30,7 +30,7 @@ const JobApplicationsPage = () => {
 
         } catch (error) {
             console.error("Failed to fetch jobs.", error);
-            navigate('/login');
+            // navigate('/login');
         }
     };
     useEffect(() => {
