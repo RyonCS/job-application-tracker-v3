@@ -21,7 +21,6 @@ const JobApplicationsPage = () => {
     const fetchJobApplications = async () => {
         try {
             // Make a GET request to fetch job applications.
-            console.log('Backend URL in get applications: ', BACKEND_URL);
             const res = await axios.get(`${BACKEND_URL}/api/v1/applications/`, {
                 withCredentials: true
             });
