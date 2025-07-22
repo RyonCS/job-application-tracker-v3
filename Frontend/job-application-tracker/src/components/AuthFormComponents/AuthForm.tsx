@@ -65,7 +65,7 @@ if (loading) { return <div>🕒 Waking up server, please wait...</div>; }
             name="login"
             className="flex flex-col items-center w-full gap-2">
                 <div className="w-full">
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="email" className="block text-sm text-center font-medium text-gray-700 mb-1">
                     Email Address
                     </label>
                     <input
@@ -81,7 +81,7 @@ if (loading) { return <div>🕒 Waking up server, please wait...</div>; }
                 </div>
 
                 <div className="w-full">
-                    <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="password" className="block text-center text-sm font-medium text-gray-700 mb-1">
                     Password
                     </label>
                     <input
