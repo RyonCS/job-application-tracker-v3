@@ -74,7 +74,6 @@ if (loading) { return <div>🕒 Waking up server, please wait...</div>; }
                     autoComplete="username"
                     value={emailAddress}
                     onChange={(e) => setEmailAddress(e.target.value)}
-                    placeholder="Email Address"
                     required
                     className="w-full border border-[#113F67] text-center rounded-2xl px-4 py-2"
                     />
@@ -90,7 +89,6 @@ if (loading) { return <div>🕒 Waking up server, please wait...</div>; }
                     autoComplete="current-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Password"
                     className="w-full border border-[#113F67] text-center rounded-2xl px-4 py-2"
                     required
                     />
