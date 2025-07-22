@@ -4,6 +4,8 @@ import type { JobApplication } from "../types/jobApplication";
 export const JobsContext = createContext<{
     jobApplications: JobApplication[];
     setJobApplications: React.Dispatch<React.SetStateAction<JobApplication[]>>;
+    filterRejected: boolean;
+    setFilterRejected: React.Dispatch<React.SetStateAction<boolean>>;
 } | null>(null);
 
 export const useJobs = () => {

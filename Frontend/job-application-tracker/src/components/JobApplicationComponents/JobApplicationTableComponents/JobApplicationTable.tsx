@@ -2,12 +2,16 @@ import JobApplicationRow from "./JobApplicationRow";
 import type { JobApplicationProps } from "../../../types/jobApplication";
 import SortButton from "./SortButton";
 import AddJobButton from "./AddJobButton";
+import FilterByRejectedButton from "./FilterByRejectedButton";
 
 // JobApplicationTable component receives an array of jobs and an onUpdate callback function via props
 const JobApplicationTable = ({jobApplications, onUpdate}: JobApplicationProps) => {
   return (
     <div className="mx-20">
-        <AddJobButton />
+        <div className="flex justify-between">
+            <AddJobButton />
+            <FilterByRejectedButton />
+        </div>
         {/* No auto resizing columns. Shared borders will combine. */}
         <table className="table-fixed w-full border border-collapse border-gray-300 mb-6">
             <thead className="bg-gray-100 border-2" >

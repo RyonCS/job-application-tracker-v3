@@ -16,7 +16,7 @@ const ApplicationSummaryCard = ({cardHeaderText, summaryType}: Props) => {
     const getApplicationSummary = async () => {
       try {
         const res = await axios.get(`${BACKEND_URL}/api/v1/applications/summary`, {
-          headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
+          withCredentials: true
         });
 
         switch (summaryType) {

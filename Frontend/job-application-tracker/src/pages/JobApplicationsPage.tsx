@@ -3,6 +3,7 @@ import {useEffect, useState} from 'react';
 import { JobsContext } from '../contexts/JobContext';
 import type { JobApplication } from '../types/jobApplication';
 import { BACKEND_URL } from '../config';
+import { useNavigate } from 'react-router-dom';
 import JobApplicationTable from '../components/JobApplicationComponents/JobApplicationTableComponents/JobApplicationTable';
 import ApplicationSummaryCard from '../components/JobApplicationComponents/ApplicationSummaryCard';
 
@@ -11,27 +12,27 @@ import ApplicationSummaryCard from '../components/JobApplicationComponents/Appli
 const JobApplicationsPage = () => {
     // State to hold the list of jobs fetched from the backend API.
     const [jobApplications, setJobApplications] = useState<JobApplication[]>([]);
+    const [filterRejected, setFilterRejected] = useState(false);
+    const navigate = useNavigate();
+
+    const jobApplicationsToDisplay = filterRejected ? jobApplications.filter((application) => application.status !== 'REJECTED') :
+    jobApplications;
 
     const fetchJobApplications = async () => {
         try {
             // Make a GET request to fetch job applications.
             console.log('Backend URL in get applications: ', BACKEND_URL);
             const res = await axios.get(`${BACKEND_URL}/api/v1/applications/`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`, // Attach token for auth.
-                },
+                withCredentials: true
             });
             // Update the jobs state with the received applications data.
             setJobApplications(res.data.applications);
 
         } catch (error) {
             console.error("Failed to fetch jobs.", error);
+            navigate('/login');
         }
     };
-
-    // useEffect runs once when the component mounts to fetch job data from the server.
-    // runs again whenever jobs changes (mainly to update with a sorted job list for adding new jobs.)
-    // TODO: Need a better method.
     useEffect(() => {
         fetchJobApplications();
     }, []);
@@ -45,12 +46,12 @@ const JobApplicationsPage = () => {
             return prevJobs.map(job => job.id === updatedJobApplication.id ? updatedJobApplication : job).sort(
               (a, b) => new Date(b.applicationDate!).getTime() - new Date(a.applicationDate!).getTime());
         })
-
+        
         try {
             // Send a PUT request to update the job on the server.
             console.log('Backend URL in get applications: ', BACKEND_URL);
             await axios.put(`${BACKEND_URL}/api/v1/applications/${updatedJobApplication.id}`, updatedJobApplication, {
-                headers: { Authorization :  `Bearer ${localStorage.getItem('token')}`},
+               withCredentials: true
             })
         } catch (error) {
             console.error('Update Failed: ', error);
@@ -60,7 +61,7 @@ const JobApplicationsPage = () => {
     // Render the JobApplicationTable component, passing the jobs list and update handler.
     return (
     // Context wrapped to pass down the current state of jobs and the ability to update them.
-    <JobsContext.Provider value={{ jobApplications, setJobApplications }}>
+    <JobsContext.Provider value={{ jobApplications, setJobApplications, filterRejected, setFilterRejected }}>
         {/* Job application table */}
         <div className="flex items-center justify-center justify-items-center">
             <ApplicationSummaryCard summaryType="total" cardHeaderText='Total' />
@@ -69,7 +70,7 @@ const JobApplicationsPage = () => {
         </div>
         
 
-        <JobApplicationTable jobApplications={jobApplications} onUpdate={handleJobApplicationUpdate} />
+        <JobApplicationTable jobApplications={jobApplicationsToDisplay} onUpdate={handleJobApplicationUpdate} />
     </JobsContext.Provider>
     )
 }

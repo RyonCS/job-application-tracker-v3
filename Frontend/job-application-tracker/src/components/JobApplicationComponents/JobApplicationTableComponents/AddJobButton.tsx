@@ -18,7 +18,7 @@ const AddJobButton = () => {
             }
 
             const res = await axios.post(`${BACKEND_URL}/api/v1/applications/`, newJob, 
-                { headers: { Authorization: `Bearer ${localStorage.getItem('token')}`}}
+                { withCredentials: true}
             );
 
             // Sort new job list; simulating backend sorting without the API call.

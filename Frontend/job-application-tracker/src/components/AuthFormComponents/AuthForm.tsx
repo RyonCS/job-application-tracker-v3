@@ -20,12 +20,14 @@ const AuthForm = ({
     bottomLinkText,
     bottomLinkHref
 }: AuthFormProps) => {
+  const [loading, setLoading] = useState(false);
   const [emailAddress, setEmailAddress] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     console.log('Backend URL:', BACKEND_URL);
     try {
         const response = await axios.post(
@@ -33,6 +35,7 @@ const AuthForm = ({
         { emailAddress, password, },
         { withCredentials: true,}
         );
+        setLoading(false);
 
         console.log('Successful Login:', response.data.token);
         localStorage.setItem('token', response.data.token);
@@ -42,12 +45,16 @@ const AuthForm = ({
         if (error.response) {
             alert(error.response.data.message || 'Login failed');
             console.error('Login failed:', error.response.data);
+            setLoading(false);
         } else {
             alert('An unexpected error occurred.');
             console.error('Error:', error.message);
+            setLoading(false);
         }
     }
 }
+
+if (loading) { return <div>🕒 Waking up server, please wait...</div>; }
 
   return (
     /* Page level container. Allows for centering items within the page as well as padding so text doesn't stick to edge of screen.*/
