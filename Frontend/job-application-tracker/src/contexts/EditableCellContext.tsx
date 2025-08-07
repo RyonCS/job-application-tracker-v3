@@ -1,8 +1,8 @@
 import { createContext, useContext } from 'react';
 
 export const EditableCellContext = createContext<{
-    editing: Boolean;
-    setEditing: React.Dispatch<React.SetStateAction<Boolean>>;
+    editing: boolean;
+    setEditing: React.Dispatch<React.SetStateAction<boolean>>;
     tempValue: string | number | undefined;
     setTempValue: React.Dispatch<React.SetStateAction<any>>;
 }|null>(null);
