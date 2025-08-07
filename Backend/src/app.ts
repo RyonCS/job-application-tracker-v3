@@ -12,6 +12,8 @@ dotenv.config();
 // Create an instance of Express application.
 const app = express();
 
+app.set('trust proxy', 1);
+
 app.use(cookieParser());
 
 app.use(

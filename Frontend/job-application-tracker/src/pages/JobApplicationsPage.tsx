@@ -31,6 +31,7 @@ const JobApplicationsPage = () => {
             console.error("Failed to fetch jobs.", error);
         }
     };
+    
     useEffect(() => {
         fetchJobApplications();
     }, []);

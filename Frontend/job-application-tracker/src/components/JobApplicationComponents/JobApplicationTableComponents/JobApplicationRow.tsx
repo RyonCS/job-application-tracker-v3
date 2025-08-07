@@ -1,4 +1,4 @@
-import EditableCell from "./EditableCell";
+import EditableCell from "./EditableCellComponents/EditableCell";
 import DeleteJobButton from "./DeleteJobButton";
 import { useState } from 'react';
 import type { JobApplication } from "../../../types/jobApplication";
