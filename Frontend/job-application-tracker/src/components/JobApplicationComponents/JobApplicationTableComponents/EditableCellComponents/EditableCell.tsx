@@ -24,10 +24,11 @@ const EditableCell = ({ field, value, onUpdate }: Props) => {
 
   // Called when editing finishes (on blur or enter key).
   // If the value changed, calls onUpdate callback with new value.
-  const finishEditing = () => {
+  const finishEditing = (next?: string | number) => {
     setEditing(false);
-    if (tempValue !== value) {
-      onUpdate(tempValue ?? '');
+    const toCommit = (next !== undefined ? next : tempValue) ?? '';
+    if (toCommit !== value) {
+      onUpdate(toCommit);
     }
   };
 
