@@ -26,8 +26,7 @@ const JobApplicationRow = ({ jobApplication, onUpdate }: Props) => {
   };
 
   return (
-    
-      <EditableCellContext.Provider value={{ editing, setEditing, tempValue, setTempValue }}>
+
         <tr className="border-2">
           {/* This cell converts the date from an object to MM-DD-YYY for display. */}
           <EditableCell field="applicationDate"
@@ -48,8 +47,6 @@ const JobApplicationRow = ({ jobApplication, onUpdate }: Props) => {
             <DeleteJobButton jobApplication={localJobApplication} />
           </td>
         </tr>
-      </EditableCellContext.Provider>
-    
   );
 };
 
