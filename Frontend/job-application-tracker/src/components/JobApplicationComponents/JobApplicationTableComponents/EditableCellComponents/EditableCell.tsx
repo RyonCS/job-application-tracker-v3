@@ -46,7 +46,7 @@ const EditableCell = ({ field, value, onUpdate }: Props) => {
         <DropDownCell field={field} handleChange={handleChange} finishEditing={finishEditing} />
       )
     }
-    return <TextCell value={value} handleChange={handleChange} finishEditing={finishEditing} />
+    return <TextCell value={tempValue} handleChange={handleChange} finishEditing={finishEditing} />
   }
 
   return (

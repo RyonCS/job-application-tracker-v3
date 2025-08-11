@@ -7,13 +7,11 @@ interface TextCellProps {
 }
 
 const TextCell = ({value, handleChange, finishEditing}: TextCellProps) => {
-    const {setEditing, tempValue, setTempValue} = useEditableCell();
-
   return (
     <div>
         <input
         type="text"
-        value={tempValue ?? ''}
+        value={value ?? ''}
         onChange={(e) => handleChange(e.target.value)}
         onBlur={finishEditing}
         onKeyDown={(e) => {
@@ -25,8 +23,8 @@ const TextCell = ({value, handleChange, finishEditing}: TextCellProps) => {
             // Revert to initial value.
             if (e.key === 'Escape') {
             e.preventDefault();
-            setEditing(false);
-            setTempValue(value);
+            handleChange(String(value ?? ''));
+            finishEditing();
             }
         }}
         autoFocus
