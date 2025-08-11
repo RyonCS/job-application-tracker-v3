@@ -11,64 +11,76 @@ interface Props {
 }
 
 const EditableCell = ({ field, value, onUpdate }: Props) => {
-    // Local state to track whether the cell is currently in editing mode.
   const [editing, setEditing] = useState(false);
-
-  // Temporary state to hold the input/select value while editing.
-  const [tempValue, setTempValue] = useState(value);
+  const [tempValue, setTempValue] = useState(value ?? '');
 
   const beginEditing = () => {
     setTempValue(value ?? '');
     setEditing(true);
   };
 
-  // Called when editing finishes (on blur or enter key).
-  // If the value changed, calls onUpdate callback with new value.
   const finishEditing = (next?: string | number) => {
     setEditing(false);
-    const toCommit = (next !== undefined ? next : tempValue) ?? '';
+    const toCommit = next !== undefined ? next : tempValue;
     if (toCommit !== value) {
       onUpdate(toCommit);
     }
   };
 
-  // Update the temporary value while typing/selecting new option.
   const handleChange = (newVal: string) => {
     setTempValue(newVal);
   };
 
+  if (value === undefined || value === null) {
+    return <td className="border p-2 text-red-500">Invalid</td>;
+  }
+
   const renderEditingComponent = () => {
     if (field === 'applicationDate') {
       return (
-        <DateCell tempValue={tempValue} handleChange={handleChange} finishEditing={finishEditing} />
-      )
+        <DateCell
+          tempValue={tempValue}
+          handleChange={handleChange}
+          finishEditing={finishEditing}
+        />
+      );
     } else if (field === 'workMode' || field === 'status') {
       return (
-        <DropDownCell field={field} value={tempValue} handleChange={handleChange} finishEditing={finishEditing} />
-      )
+        <DropDownCell
+          field={field}
+          value={tempValue}
+          handleChange={handleChange}
+          finishEditing={finishEditing}
+        />
+      );
     }
-    return <TextCell value={tempValue} handleChange={handleChange} finishEditing={finishEditing} />
-  }
+
+    return (
+      <TextCell
+        value={tempValue}
+        handleChange={handleChange}
+        finishEditing={finishEditing}
+      />
+    );
+  };
 
   return (
     <td className="border border-gray-300 text-sm p-0.5">
       {editing ? (
-        renderEditingComponent()) : 
-      (
-        // Non-editing mode: display the value inside a div.
-        // Clicking this div enables editing mode.
+        renderEditingComponent()
+      ) : (
         <div
           className="w-full h-8 px-2 flex items-center truncate cursor-pointer"
           onClick={beginEditing}
         >
-          {/* If the company value is too long, truncate. */}
-          {(field === 'company' && value && value.toString().length > 23)
+          {(field === 'company' && value.toString().length > 23)
             ? value.toString().slice(0, 23) + '...'
-            : value || ''}
+            : value.toString()}
         </div>
       )}
     </td>
   );
 };
+
 
 export default EditableCell;
