@@ -18,7 +18,7 @@ const TextCell = ({
         type="text"
         value={safeValue}
         onChange={(e) => handleChange(e.target.value)}
-        onBlur={finishEditing}
+        onBlur={() => finishEditing()}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
             e.preventDefault();
