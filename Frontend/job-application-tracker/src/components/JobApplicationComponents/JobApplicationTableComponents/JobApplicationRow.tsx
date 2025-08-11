@@ -27,7 +27,11 @@ const JobApplicationRow = ({ jobApplication, onUpdate }: Props) => {
         <tr className="border-2">
           {/* This cell converts the date from an object to MM-DD-YYY for display. */}
           <EditableCell field="applicationDate"
-            value={new Date(localJobApplication.applicationDate!).toISOString().substring(0, 10)}
+            value={
+              localJobApplication.applicationDate
+                ? new Date(localJobApplication.applicationDate).toISOString().substring(0, 10)
+                : ''
+            }
             onUpdate={(val) => handleChange('applicationDate', val)}
           />
           {/* Each cell has a field, value, and onUpdate function. Field is mainly used for workMode and status
