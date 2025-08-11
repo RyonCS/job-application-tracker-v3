@@ -43,7 +43,7 @@ const EditableCell = ({ field, value, onUpdate }: Props) => {
       )
     } else if (field === 'workMode' || field === 'status') {
       return (
-        <DropDownCell field={field} value={value} handleChange={handleChange} finishEditing={finishEditing} />
+        <DropDownCell field={field} value={tempValue} handleChange={handleChange} finishEditing={finishEditing} />
       )
     }
     return <TextCell value={tempValue} handleChange={handleChange} finishEditing={finishEditing} />
