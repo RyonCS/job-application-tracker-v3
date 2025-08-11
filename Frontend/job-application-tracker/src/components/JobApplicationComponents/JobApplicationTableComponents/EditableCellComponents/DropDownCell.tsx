@@ -1,7 +1,6 @@
-import { useEditableCell } from "../../../../contexts/EditableCellContext";
-
 interface DropDownCellProps {
     field: string | undefined;
+    value: string | number | undefined; 
     handleChange: (value:string) => void;
     finishEditing: () => void;
 }
@@ -10,13 +9,12 @@ interface DropDownCellProps {
 const workModeOptions = ['REMOTE', 'INPERSON', 'HYBRID'];
 const statusOptions = ['APPLIED', 'PHONESCREEN', 'INTERVIEW', 'TAKEHOMEASSESSMENT', 'OFFER', 'REJECTED', 'DECLINED'];
 
-const DropDownCell = ({field, handleChange, finishEditing}: DropDownCellProps) => {
-    const {tempValue} = useEditableCell();
+const DropDownCell = ({field, value, handleChange, finishEditing}: DropDownCellProps) => {
 
   return (
     <div>
       <select
-            value={tempValue ?? ''}
+            value={value !== undefined ? String(value) : ''}
             onChange={e => handleChange(e.target.value)}
             onBlur={finishEditing}
             autoFocus

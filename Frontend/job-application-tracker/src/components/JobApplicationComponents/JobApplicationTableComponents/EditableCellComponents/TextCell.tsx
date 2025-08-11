@@ -1,5 +1,3 @@
-import { useEditableCell } from '../../../../contexts/EditableCellContext';
-
 interface TextCellProps {
     value: string | number | undefined;
     handleChange: (value:string) => void;
