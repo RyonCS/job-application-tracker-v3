@@ -2,7 +2,6 @@ import EditableCell from "./EditableCellComponents/EditableCell";
 import DeleteJobButton from "./DeleteJobButton";
 import { useState } from 'react';
 import type { JobApplication } from "../../../types/jobApplication";
-import { EditableCellContext } from "../../../contexts/EditableCellContext";
 
 interface Props {
   jobApplication: JobApplication;
@@ -13,8 +12,6 @@ interface Props {
 const JobApplicationRow = ({ jobApplication, onUpdate }: Props) => {
   // Store and update the current and edited job.
   const [localJobApplication, setLocalJobApplication] = useState(jobApplication);
-  const [editing, setEditing] = useState(false);
-  const [tempValue, setTempValue] = useState<string | number | undefined>('');
 
   // When there's a change to the value...
   // update the local job and send a put request to update the job in the DB.
