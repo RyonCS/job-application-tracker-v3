@@ -17,6 +17,11 @@ const EditableCell = ({ field, value, onUpdate }: Props) => {
   // Temporary state to hold the input/select value while editing.
   const [tempValue, setTempValue] = useState(value);
 
+  const beginEditing = () => {
+    setTempValue(value ?? '');
+    setEditing(true);
+  };
+
   // Called when editing finishes (on blur or enter key).
   // If the value changed, calls onUpdate callback with new value.
   const finishEditing = () => {
@@ -53,7 +58,7 @@ const EditableCell = ({ field, value, onUpdate }: Props) => {
         // Clicking this div enables editing mode.
         <div
           className="w-full h-8 px-2 flex items-center truncate cursor-pointer"
-          onClick={() => setEditing(true)}
+          onClick={beginEditing}
         >
           {/* If the company value is too long, truncate. */}
           {(field === 'company' && value && value.toString().length > 23)
