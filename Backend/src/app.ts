@@ -15,7 +15,7 @@ const app = express();
 // ===== CORS =====
 
 const allowedOrigins = [
-  'https://job-application-tracker-v3.vercel.app/',
+  'https://job-application-tracker-v3.vercel.app',
   'http://localhost:3000',
   'http://localhost:5173',
 ];
