@@ -15,10 +15,11 @@ const app = express();
 // ===== CORS =====
 
 const allowedOrigins = [
-  process.env.FRONTEND_URL,
+  'https://job-application-tracker-v3.vercel.app/',
   'http://localhost:3000',
   'http://localhost:5173',
 ];
+
 app.use(cors({
   origin: allowedOrigins,
   credentials: true,
