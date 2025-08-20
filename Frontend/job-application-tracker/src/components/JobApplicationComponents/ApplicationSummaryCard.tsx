@@ -37,6 +37,7 @@ const ApplicationSummaryCard = ({cardHeaderText, summaryType}: Props) => {
       }
     };
     getApplicationSummary()
+    console.log(applicationSummary);
   }, [jobApplications.length]);
 
   return (

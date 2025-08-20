@@ -40,11 +40,11 @@ const JobApplicationsPage = () => {
     const handleJobApplicationUpdate = async (updatedJobApplication: JobApplication) => {
         // Optimistic updating.
         // We go through the list of jobs and replace the old job with the newly updated job before making the API call.
-        setJobApplications(prevJobs => {
-            // Update job. Then sort for display without API call.
-            return prevJobs.map(job => job.id === updatedJobApplication.id ? updatedJobApplication : job).sort(
-              (a, b) => new Date(b.applicationDate!).getTime() - new Date(a.applicationDate!).getTime());
-        })
+        setJobApplications(prevJobs =>
+            prevJobs.map(job =>
+            job.id === updatedJobApplication.id ? updatedJobApplication : job
+            )
+        );
         
         try {
             // Send a PUT request to update the job on the server.
