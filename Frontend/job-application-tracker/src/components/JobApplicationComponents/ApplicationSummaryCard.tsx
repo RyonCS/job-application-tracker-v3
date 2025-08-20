@@ -30,6 +30,7 @@ const ApplicationSummaryCard = ({cardHeaderText, summaryType}: Props) => {
             break;
           case 'conversion':
             setApplicationSummary(res.data.applicationSummary.conversionPercent);
+            console.log(res.data.applicationSummary.conversionPercent);
         }
       } catch (error) {
         console.error(error);
