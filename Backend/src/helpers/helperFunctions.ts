@@ -13,7 +13,7 @@ export const getApplicationSummary = (jobApplications: any) => {
         (jobApplication.status !== 'REJECTED' && jobApplication.status != 'APPLIED'));
 
     const conversionPercent = (successfulApplications.length > 0 ? 
-        (successfulApplications.length / totalApplications * 100).toFixed(1) : '');
+        (successfulApplications.length / totalApplications * 100).toFixed(1) : '0.0');
 
     return { totalApplications, weeklyApplications, conversionPercent};
 };
