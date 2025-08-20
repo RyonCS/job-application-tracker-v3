@@ -6,7 +6,7 @@ export type JobApplication = {
     location?: string;
     workMode?: 'REMOTE' | 'INPERSON' | 'HYBRID';
     status?: 'APPLIED' | 'PHONESCREEN' | 'INTERVIEW' | 'TAKEHOMEASSESSMENT' | 'OFFER' | 'REJECTED' | 'DECLINED';
-    link?: string;
+    linkToJobPosting?: string;
 }
 
 export type JobApplicationProps = {

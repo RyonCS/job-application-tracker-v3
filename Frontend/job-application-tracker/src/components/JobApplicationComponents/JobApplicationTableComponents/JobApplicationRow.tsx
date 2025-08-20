@@ -41,7 +41,8 @@ const JobApplicationRow = ({ jobApplication, onUpdate }: Props) => {
           <EditableCell field="location" value={localJobApplication.location} onUpdate={val => handleChange('location', val)} />
           <EditableCell field="workMode" value={localJobApplication.workMode} onUpdate={val => handleChange('workMode', val)} />
           <EditableCell field="status" value={localJobApplication.status} onUpdate={val => handleChange('status', val)} />
-          <EditableCell field="link" value={localJobApplication.link} onUpdate={val => handleChange('link', val)} />
+          <EditableCell field="linkToJobPosting" value={localJobApplication.linkToJobPosting} 
+          onUpdate={val => handleChange('linkToJobPosting', val)} />
 
           {/* Not editable cell, just a delete button in each row. */}
           <td className="px-2 py-1 flex justify-center items-center">
