@@ -53,6 +53,17 @@ const EditableCell = ({ field, value, onUpdate }: Props) => {
           finishEditing={finishEditing}
         />
       );
+    } else if (field === "linkToJobPosting" && tempValue) {
+      return (
+        <a
+          href={String(tempValue)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 underline"
+        >
+          {String(tempValue)}
+        </a>
+      );
     }
 
     return (
