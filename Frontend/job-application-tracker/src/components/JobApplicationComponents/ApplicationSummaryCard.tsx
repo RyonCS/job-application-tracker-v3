@@ -29,7 +29,7 @@ const ApplicationSummaryCard = ({cardHeaderText, summaryType}: Props) => {
             setApplicationSummary(res.data.applicationSummary.weeklyApplications)
             break;
           case 'conversion':
-            setApplicationSummary(res.data.applicationSummary.conversionPercent);
+            setApplicationSummary(res.data.applicationSummary.conversionPercent ?? "0.0");
             console.log(res.data.applicationSummary.conversionPercent ?? "0.0");
         }
       } catch (error) {
