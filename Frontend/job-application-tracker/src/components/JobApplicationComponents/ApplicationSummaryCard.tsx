@@ -43,7 +43,7 @@ const ApplicationSummaryCard = ({cardHeaderText, summaryType}: Props) => {
         }
       };
       fetchSummary();
-    }, 500);
+    }, 250);
     
     return () => clearTimeout(timer);
   }, [jobApplications]);
